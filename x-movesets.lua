@@ -8,27 +8,6 @@ if not charSelect then return end
 -- Character Data Resetting --
 ------------------------------
 
-local charResetActions
-
---- Resets the character action
---- @param m MarioState
-function character_actions_reset(m)
-    if m.playerIndex ~= 0 then return end
-    local CT_CHAR = character_get_current_number()
-
-    -- Insert your actions to force reset when you aren't that character
-    charResetActions = charResetActions or {
-        [ACT_BIRDO_HOLD_WALKING]  = CT_BIRDO,
-        [ACT_SPIT_EGG]            = CT_BIRDO,
-        [ACT_SPIT_EGG_AIR]        = CT_BIRDO,
-        [ACT_SPIT_EGG_WALK]       = CT_BIRDO,
-    }
-
-    if charResetActions[m.action] and charResetActions[m.action] ~= CT_CHAR then
-        force_idle_state(m)
-    end
-end
-
 local PITCH_AND_HITBOX_RESET_ACTIONS
 --- @param m MarioState
 function reset_from_action(m)
@@ -40,10 +19,6 @@ function reset_from_action(m)
 
     --- Resets the body rotations, pitch, and hitbox size on new actions
     PITCH_AND_HITBOX_RESET_ACTIONS = PITCH_AND_HITBOX_RESET_ACTIONS or T{
-        ACT_DONKEY_KONG_ROLL,
-        ACT_DONKEY_KONG_ROLL_AIR,
-        ACT_DONKEY_KONG_POUND,
-        ACT_DONKEY_KONG_POUND_HIT,
         ACT_SONIC_SPIN_JUMP,
         ACT_SONIC_AIR_SPIN,
         ACT_SONIC_HOMING_ATTACK,
@@ -56,7 +31,6 @@ function reset_from_action(m)
     end
 end
 
-hook_event(HOOK_MARIO_UPDATE, character_actions_reset)
 hook_event(HOOK_ON_SET_MARIO_ACTION, reset_from_action)
 
 ------------
